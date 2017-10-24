@@ -1,15 +1,15 @@
 # Site settings
-title: Li Sanpeng
+title: Su Dongper
 description: 'From Small Beginning'
-url: 'https://lisanpeng.github.io'
+url: 'https://ashyoo.github.io'
 baseurl: ''
 # google_analytics: 'UA-XXXXXX-X'
 # disqus_shortname: 'your-disqus-name'
 
 author:
-  name: 'LiSanpeng'
+  name: 'SuDongper'
   email: lspli3@163.com
-  github_username:  lisanpeng
+  github_username:  酥东坡er
 
 defaults:
   -
