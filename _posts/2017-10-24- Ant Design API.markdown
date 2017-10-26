@@ -1,5 +1,5 @@
 ---
-title:  "antd api 的使用"
+title:  "Ant Design API"
 categories: [react]
 tags: [react]
 date: 2017/10/24
@@ -7,12 +7,10 @@ date: 2017/10/24
 
 又一期项目结束了,总结一下antd的api,熟练使用的话的确能提升开发效率
 
-# Ant Design API
-
 ## Form 表单
 
 * antd Form.Item
-```
+```javascript
   const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 }
@@ -28,21 +26,25 @@ date: 2017/10/24
 ***
 * antd Form.create()
 
-    > 使用方式如下：
-
-    > class CustomizedForm extends React.Component {}
-
+    > 使用方式如下：<br />
+    > class CustomizedForm extends React.Component {}<br />
     > CustomizedForm = Form.create({})(CustomizedForm)
 
-经过 Form.create 包装的组件将会自带 this.props.form 属性，this.props.form 提供的 API 如下：
+经过 Form.create 包装的组件将会自带 this.props.form 属性，this.props.form 提供api
 
-![Form.create](http://t3.qpic.cn/mblogpic/e0baad159010a7fd5b64/460)
+参数| 主要内容
+-------|----------
+getFieldsValue | 获取一组输入控件的值，如不传入参数，则获取全部组件的值
+getFieldValue | 获取一个输入控件的值
+setFieldsValue | 设置一组输入控件的值（注意：不要在 componentWillReceiveProps 内使用，否则会导致死循环）
+validateFields | 校验并获取一组输入域的值与 Error，若 fieldNames 参数为空，则校验全部组件
+getFieldsError | 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
 
 `getFieldsValue`获取一组输入控件的值，如不传入参数，则获取全部组件的值
 
 `getFieldValue`获取一个输入控件的值
 
-```
+```javascript
   _getOrderList = () => {
     const filterData = this.props.form.getFieldsValue()
     const { dispatch } = this.props
@@ -55,12 +57,11 @@ date: 2017/10/24
 
 `getFieldDecorator` 表单的双向绑定 this.props.form.getFieldDecorator(id, options)
 
->经过 getFieldDecorator 包装的控件，表单控件会自动添加 value（或 valuePropName 指定的其他属性） onChange（或 trigger 指定的其他属性），数据同步将被 Form 接管，这会导致以下结果：
-
+>经过 getFieldDecorator 包装的控件，表单控件会自动添加 value（或 valuePropName 指定的其他属性） onChange（或 trigger 指定的其他属性），数据同步将被 Form 接管，这会导致以下结果：<br />
 >1. 你不再需要也不应该用 onChange 来做同步，但还是可以继续监听 onChange 等事件
 >2. 你不能用控件的 value defaultValue 等属性来设置表单域的值，默认值可以用 getFieldDecorator 里的 initialValue。
 >3. 你不应该用 setState，可以使用 this.props.form.setFieldsValue 来动态改变表单值。
-```
+```javascript
 // bad
       this.state = {
         password = ''
@@ -92,7 +93,7 @@ date: 2017/10/24
 * antd Form 校验
 
 antd的Form表单中的属性 pattern 可以直接写正则表达式校验
-```
+```javascript
   const { getFieldDecorator } = this.props.form
   <FormItem { ...formItemLayout } label='账号'>
     {getFieldDecorator('userName', {
@@ -104,7 +105,7 @@ antd的Form表单中的属性 pattern 可以直接写正则表达式校验
         pattern: /^[0-9A-Za-z]{1,15}$/,   // 正则表达式校验
         message: '账号格式错误：只能数字和字母，最多不能超过15位' // 错误信息
       }],
-      initialValue: ‘ 默认值 ’
+      initialValue: '默认值'
     })(
       <Input placeholder='数字、字母、数字和字母组合，最多不能超过15位'/>
     )}
@@ -123,7 +124,7 @@ pagination | 分页器，配置项参考 pagination，设为 false 时不展示�
 columns | 表格列的配置描述
 rowKey | 表格行 key 的取值，可以是字符串或一个函数
 
- ```
+ ```javascript
  // bad
 
  <Row>
@@ -176,7 +177,7 @@ colSpan | 表头列合并,设置为 0 时，不渲染
 width | 列宽度
 
 
-```
+```javascript
   _columns = [{
     title: '活动时间',
     dataIndex: 'activityTimeFrom',
@@ -218,13 +219,13 @@ onPressEnter | 按下回车的回调
 >如果 Input 在 Form.Item 内，并且 Form.Item 设置了 id 和 options 属性，则 value defaultValue 和 id 属性会被自动设置。
 
 1. `Input.Search`搜索框
-
-        onSearch  点击搜索或按下回车键时的回调
-
+```javascript
+onSearch  点击搜索或按下回车键时的回调
+```
 2. `Input.TextArea`文本域
 
 3. `Input.TextArea`数字输入框
-```
+```javascript
 min	  最小值
 max	  最大值
 step	 小数位数
