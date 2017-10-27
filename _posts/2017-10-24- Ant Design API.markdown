@@ -5,7 +5,7 @@ tags: [react]
 date: 2017/10/24
 ---
 
-又一期项目结束了,总结一下antd的api,熟练使用的话的确能提升开发效率
+又一期项目结束了,总结一下 Ant Design 常用的api,熟练使用的话的确能提升开发效率
 
 ## Form 表单
 
@@ -88,7 +88,6 @@ getFieldsError | 获取一组输入控件的 Error ，如不传入参数，则�
         )}
       </FormItem>
 ```
-
 ***
 * antd Form 校验
 
@@ -98,12 +97,12 @@ antd的Form表单中的属性 pattern 可以直接写正则表达式校验
   <FormItem { ...formItemLayout } label='账号'>
     {getFieldDecorator('userName', {
       rules: [{
-        required: true,  //是否需要校验
+        required: true,    //是否需要校验
         min: 6,    //最小长度
         max: 18,    //最大长度
-        whitespace: true, // true时，不可以出现空格
-        pattern: /^[0-9A-Za-z]{1,15}$/,   // 正则表达式校验
-        message: '账号格式错误：只能数字和字母，最多不能超过15位' // 错误信息
+        whitespace: true,    // true时，不可以出现空格
+        pattern: /^[0-9A-Za-z]{1,15}$/,    // 正则表达式校验
+        message: '账号格式错误：只能数字和字母，最多不能超过15位'    // 错误信息
       }],
       initialValue: '默认值'
     })(
@@ -151,16 +150,16 @@ rowKey | 表格行 key 的取值，可以是字符串或一个函数
   />
   <Pagination
     onChange={this._handleChange}
-    current={tableList.page.currentPage}  // 当前页数
-    defaultPageSize={tableList.page.pageSize}  // 默认的每页条数
-    showTotal={total => `总共 ${tableList.page.totalCount} 条`}  // 用于显示数据总量和当前数据顺序
-    total={tableList.page && tableList.page.totalCount} // 数据总数
+    current={tableList.page.currentPage}    // 当前页数
+    defaultPageSize={tableList.page.pageSize}    // 默认的每页条数
+    showTotal={total => `总共 ${tableList.page.totalCount} 条`}    // 用于显示数据总量和当前数据顺序
+    total={tableList.page && tableList.page.totalCount}    // 数据总数
   />
  ```
 >注意：
 >按照 React 的规范，所有的组件数组必须绑定 key。在 Table 中，dataSource 和 columns 里的数据值都需要指定 key 值。对于 dataSource 默认将每列数据的 key 属性作为唯一的标识。
 
-![](https://os.alipayobjects.com/rmsportal/luLdLvhPOiRpyss.png)
+![报错信息](https://ashyoo.github.io/ashyoo.github.io/images/20171024/no-rowkey-error.png)
 `rowKey={item => item.orderNo}`唯一的主键
 
 ***
