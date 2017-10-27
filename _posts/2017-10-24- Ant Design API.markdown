@@ -40,6 +40,40 @@ setFieldsValue | 设置一组输入控件的值（注意：不要在 componentWi
 validateFields | 校验并获取一组输入域的值与 Error，若 fieldNames 参数为空，则校验全部组件
 getFieldsError | 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
 
+---
+
+*Ant Design Form 源码*
+
+```javascript
+/** 获取一组输入控件的值，如不传入参数，则获取全部组件的值 */
+getFieldsValue(fieldNames?: Array<string>): Object;
+/** 获取一个输入控件的值*/
+getFieldValue(fieldName: string): any;
+/** 设置一组输入控件的值*/
+setFieldsValue(obj: Object): void;
+/** 设置一组输入控件的值*/
+setFields(obj: Object): void;
+
+getFieldDecorator(id: string, options: {
+  /** 子节点的值的属性，如 Checkbox 的是 'checked' */
+  valuePropName?: string;
+  /** 子节点的初始值，类型、可选值均由子节点决定 */
+  initialValue?: any;
+  /** 收集子节点的值的时机 */
+  trigger?: string;
+  /** 可以把 onChange 的参数转化为控件的值，例如 DatePicker 可设为：(date, dateString) => dateString */
+  getValueFromEvent?: (...args: any[]) => any;
+  /** 校验子节点值的时机 */
+  validateTrigger?: string;
+  /** 校验规则，参见 [async-validator](https://github.com/yiminghe/async-validator) */
+  rules?: Array<any>;
+  /** 是否和其他控件互斥，特别用于 Radio 单选控件 */
+  exclusive?: boolean;
+}): (node: React.ReactNode) => React.ReactNo;
+}
+```
+---
+
 `getFieldsValue`获取一组输入控件的值，如不传入参数，则获取全部组件的值
 
 `getFieldValue`获取一个输入控件的值
@@ -159,7 +193,7 @@ rowKey | 表格行 key 的取值，可以是字符串或一个函数
 >注意：
 >按照 React 的规范，所有的组件数组必须绑定 key。在 Table 中，dataSource 和 columns 里的数据值都需要指定 key 值。对于 dataSource 默认将每列数据的 key 属性作为唯一的标识。
 
-![报错信息](https://ashyoo.github.io/ashyoo.github.io/images/20171024/no-rowkey-error.png)
+![报错信息](https://github.com/Ashyoo/Ashyoo.github.io/blob/master/images/20171024/no-rowkey-error.png?raw=true)
 `rowKey={item => item.orderNo}`唯一的主键
 
 ***
@@ -231,6 +265,7 @@ step	 小数位数
 ```
 
 ## Modal 对话框
+
 参数| 主要内容
 -------|----------
 visible | 对话框是否可见
@@ -241,3 +276,32 @@ onCancel | 点击遮罩层或右上角叉或取消按钮的回调
 
 > 清空旧数据
 > <Modal /> 组件有标准的 React 生命周期，关闭后状态不会自动清空。 如果希望每次打开都是新内容，需要自行手动清空旧的状态。
+
+---
+ *Ant Design Modal 源码*
+
+```javascript
+  /** 对话框是否可见*/
+  visible?: boolean;
+  /** 确定按钮 loading*/
+  confirmLoading?: boolean;
+  /** 标题*/
+  title?: React.ReactNode | string;
+  /** 是否显示右上角的关闭按钮*/
+  closable?: boolean;
+  /** 点击确定回调*/
+  onOk?: () => void;
+  /** 点击模态框右上角叉、取消按钮、Props.maskClosable 值为 true 时的遮罩层或键盘按下 Esc 时的回调*/
+  onCancel?: (e: React.MouseEvent<any>) => void;
+  /** 宽度*/
+  width?: string | number;
+  /** 底部内容*/
+  footer?: React.ReactNode;
+  /** 确认按钮文字*/
+  okText?: string;
+  /** 取消按钮文字*/
+  cancelText?: string;
+  /** 点击蒙层是否允许关闭*/
+  maskClosable?: boolean;
+```
+---
