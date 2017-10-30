@@ -5,11 +5,13 @@ tags: [react]
 date: 2017/10/24
 ---
 
-又一期项目结束了,总结一下 Ant Design 常用的api,熟练使用的话的确能提升开发效率
+Ant Design 常用api
 
 ## Form 表单
 
 * antd Form.Item
+> 一个 Form.Item 建议只放一个被 getFieldDecorator 装饰过的 child，当有多个被装饰过的 child 时，help required validateStatus 无法自动生成。
+
 ```javascript
   const formItemLayout = {
     labelCol: { span: 4 },
@@ -32,57 +34,71 @@ date: 2017/10/24
 
 经过 Form.create 包装的组件将会自带 this.props.form 属性，this.props.form 提供api
 
-参数| 主要内容
+参数| 说明
 -------|----------
 getFieldsValue | 获取一组输入控件的值，如不传入参数，则获取全部组件的值
 getFieldValue | 获取一个输入控件的值
 setFieldsValue | 设置一组输入控件的值（注意：不要在 componentWillReceiveProps 内使用，否则会导致死循环）
 validateFields | 校验并获取一组输入域的值与 Error，若 fieldNames 参数为空，则校验全部组件
 getFieldsError | 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
-
 ---
-
 *Ant Design Form 源码*
 
-```javascript
+```js
 /** 获取一组输入控件的值，如不传入参数，则获取全部组件的值 */
-getFieldsValue(fieldNames?: Array<string>): Object;
+  getFieldsValue(fieldNames?: Array<string>): Object;
 /** 获取一个输入控件的值*/
-getFieldValue(fieldName: string): any;
+  getFieldValue(fieldName: string): any;
 /** 设置一组输入控件的值*/
-setFieldsValue(obj: Object): void;
+  setFieldsValue(obj: Object): void;
 /** 设置一组输入控件的值*/
-setFields(obj: Object): void;
+  setFields(obj: Object): void;
+/** 校验并获取一组输入域的值与 Error */
+  validateFields(fieldNames: Array<string>,
+                 options: Object,
+                 callback: (erros: any, values: any) => void): any;
+  /** 与 `validateFields` 相似，但校验完后，如果校验不通过的菜单域不在可见范围内，则自动滚动进可见范围 */
+  validateFieldsAndScroll(fieldNames?: Array<string>,
+                        options?: Object,
+                        callback?: (erros: any, values: any) => void): void;
 
-getFieldDecorator(id: string, options: {
+  /** 用于和表单进行双向绑定 */
+  getFieldDecorator(id: string, options: {
   /** 子节点的值的属性，如 Checkbox 的是 'checked' */
-  valuePropName?: string;
+    valuePropName?: string;
   /** 子节点的初始值，类型、可选值均由子节点决定 */
-  initialValue?: any;
-  /** 收集子节点的值的时机 */
-  trigger?: string;
-  /** 可以把 onChange 的参数转化为控件的值，例如 DatePicker 可设为：(date, dateString) => dateString */
-  getValueFromEvent?: (...args: any[]) => any;
-  /** 校验子节点值的时机 */
-  validateTrigger?: string;
+    initialValue?: any;
   /** 校验规则，参见 [async-validator](https://github.com/yiminghe/async-validator) */
-  rules?: Array<any>;
+    rules?: Array<any>;
   /** 是否和其他控件互斥，特别用于 Radio 单选控件 */
-  exclusive?: boolean;
-}): (node: React.ReactNode) => React.ReactNo;
-}
+    exclusive?: boolean;
+  }): (node: React.ReactNode) => React.ReactNo;
 ```
 ---
 
-`getFieldsValue`获取一组输入控件的值，如不传入参数，则获取全部组件的值
+`validateFields`校验并获取一组输入域的值与 Error
 
-`getFieldValue`获取一个输入控件的值
+```js
+_handleRefundOk = () => {
+  this.props.form.validateFields(
+    (err, value) => {
+      if (!err) {
+        this.props.dispatch(action.doRefundData({
+          amount: value.amount,
+          memo: value.memo
+        }))
+      }
+    },
+  )
+}
+```
+
+`getFieldsValue`获取一个输入控件的值
 
 ```javascript
   _getOrderList = () => {
     const filterData = this.props.form.getFieldsValue()
-    const { dispatch } = this.props
-    dispatch(action.getOrderInfo({
+    this.props.dispatch(action.getOrderInfo({
       orderNo: filterData.orderNo || '',
       status: filterData.orderStatus || '',
     }))
@@ -95,6 +111,7 @@ getFieldDecorator(id: string, options: {
 >1. 你不再需要也不应该用 onChange 来做同步，但还是可以继续监听 onChange 等事件
 >2. 你不能用控件的 value defaultValue 等属性来设置表单域的值，默认值可以用 getFieldDecorator 里的 initialValue。
 >3. 你不应该用 setState，可以使用 this.props.form.setFieldsValue 来动态改变表单值。
+
 ```javascript
 // bad
       this.state = {
@@ -122,6 +139,7 @@ getFieldDecorator(id: string, options: {
         )}
       </FormItem>
 ```
+
 ***
 * antd Form 校验
 
@@ -148,7 +166,7 @@ antd的Form表单中的属性 pattern 可以直接写正则表达式校验
 ## Table 表格
 * Table
 
-参数| 主要内容
+参数| 说明
 -------|----------
 title | 表格尾部
 footer | 表格标题
@@ -185,7 +203,7 @@ rowKey | 表格行 key 的取值，可以是字符串或一个函数
   <Pagination
     onChange={this._handleChange}
     current={tableList.page.currentPage}    // 当前页数
-    defaultPageSize={tableList.page.pageSize}    // 默认的每页条数
+    defaultPageSize={tableList.page.pageSize}    // 每页显示条数
     showTotal={total => `总共 ${tableList.page.totalCount} 条`}    // 用于显示数据总量和当前数据顺序
     total={tableList.page && tableList.page.totalCount}    // 数据总数
   />
@@ -200,7 +218,7 @@ rowKey | 表格行 key 的取值，可以是字符串或一个函数
 
 * columns 表格列的配置描述（表头）
 
-参数| 主要内容
+参数| 说明
 -------|----------
 title | 列头显示文字
 key | React 需要的 key，如果已经设置了唯一的 dataIndex，可以忽略这个属性
@@ -240,7 +258,7 @@ width | 列宽度
 
 ## Input 输入框
 
-参数| 主要内容
+参数| 说明
 -------|----------
 type | 声明 input 类型，同原生 input 标签的 type 属性。
 id | 输入框的 id
@@ -266,7 +284,7 @@ step	 小数位数
 
 ## Modal 对话框
 
-参数| 主要内容
+参数| 说明
 -------|----------
 visible | 对话框是否可见
 title | 标题
@@ -277,6 +295,19 @@ onCancel | 点击遮罩层或右上角叉或取消按钮的回调
 > 清空旧数据
 > <Modal /> 组件有标准的 React 生命周期，关闭后状态不会自动清空。 如果希望每次打开都是新内容，需要自行手动清空旧的状态。
 
+```javascript
+// cancel onClick
+  _onCancel = () => {
+    this.props.dispatch(action.CLEARDATA())
+  }
+// action
+  export const CLEARDATA = () => ({
+    type: CLEAR_DATA,
+  })
+// reducer
+  case CLEAR_DATA:
+    return { ...state, ...{ orderDetail: {} }}
+```
 ---
  *Ant Design Modal 源码*
 
