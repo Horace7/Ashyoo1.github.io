@@ -41,9 +41,7 @@ getFieldValue | 获取一个输入控件的值
 setFieldsValue | 设置一组输入控件的值（注意：不要在 componentWillReceiveProps 内使用，否则会导致死循环）
 validateFields | 校验并获取一组输入域的值与 Error，若 fieldNames 参数为空，则校验全部组件
 getFieldsError | 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
-
 ---
-
 *Ant Design Form 源码*
 
 ```js
@@ -146,6 +144,7 @@ _handleRefundOk = () => {
 * antd Form 校验
 
 antd的Form表单中的属性 pattern 可以直接写正则表达式校验
+
 ```javascript
   const { getFieldDecorator } = this.props.form
   <FormItem { ...formItemLayout } label='账号'>
@@ -160,7 +159,38 @@ antd的Form表单中的属性 pattern 可以直接写正则表达式校验
       }],
       initialValue: '默认值'
     })(
-      <Input placeholder='数字、字母、数字和字母组合，最多不能超过15位'/>
+      <Input />
+    )}
+  </FormItem>
+```
+或
+```javascript
+
+  _validateAmount = (rule, value, callback) => {
+    const { data } = this.props
+    let errorMessage = '退款金额必须小于订单剩余可退金额'
+    if (value > numeral(data.amount || 0).subtract(data.refundAmount || 0).value()) {
+      rule.message = errorMessage
+      callback(errorMessage)
+    } else if (value === undefined || value <= 0) {
+      errorMessage = '请输入正确退款金额'
+      rule.message = errorMessage
+      callback(errorMessage)
+    } else {
+      callback()
+    }
+  }
+  ...
+  const { getFieldDecorator } = this.props.form
+  <FormItem { ...formItemLayout } label='账号'>
+    {getFieldDecorator('userName', {
+      rules: [{
+        required: true,    // 是否需要校验
+        validator: this._validateAmount    // 校验规则
+      }],
+      initialValue: '默认值'
+    })(
+      <Input />
     )}
   </FormItem>
 ```
