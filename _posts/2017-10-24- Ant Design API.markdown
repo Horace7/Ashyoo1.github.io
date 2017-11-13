@@ -1,7 +1,7 @@
 ---
 title:  "Ant Design API"
 categories: [react]
-tags: [react]
+tags: [React]
 date: 2017/10/24
 ---
 
@@ -41,6 +41,7 @@ getFieldValue | 获取一个输入控件的值
 setFieldsValue | 设置一组输入控件的值（注意：不要在 componentWillReceiveProps 内使用，否则会导致死循环）
 validateFields | 校验并获取一组输入域的值与 Error，若 fieldNames 参数为空，则校验全部组件
 getFieldsError | 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
+
 ---
 
 *Ant Design Form 源码*
@@ -93,7 +94,7 @@ _handleRefundOk = () => {
 }
 ```
 
-`getFieldsValue`获取一个输入控件的值
+`getFieldsValue`获取一组输入控件的值
 
 ```javascript
   _getOrderList = () => {
@@ -103,6 +104,14 @@ _handleRefundOk = () => {
       status: filterData.orderStatus || '',
     }))
   }
+```
+
+`getFieldValue`获取一个输入控件的值
+
+```javascript
+  this.state.businessType === '2' && this.props.from.getFieldValue('productType') !== '1' && (
+    return <input />
+  )
 ```
 
 `getFieldDecorator` 表单的双向绑定 this.props.form.getFieldDecorator(id, options)
